@@ -86,6 +86,10 @@
   };
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
+  // ---- meals ----
+  if (W.meals && W.meals.length) $("#mealSelect").innerHTML = W.meals.map(m => `<option>${esc(m)}</option>`).join("");
+  else $("#mealField").remove();
+
   // ---- RSVP ----
   const form = $("#rsvpForm"), msg = $("#formMsg");
   form.addEventListener("submit", async e => {
@@ -93,7 +97,7 @@
     const f = Object.fromEntries(new FormData(form));
     if (f._gotcha) return;
     if (!f.name || !f.attending) { msg.textContent = "Please add your name and let us know if you can attend."; return; }
-    const text = `RSVP — ${binds.names}\nName: ${f.name}\nResponse: ${f.attending}\nGuests: ${f.guests}\nPhone: ${f.phone || "-"}\nDietary: ${f.dietary || "-"}\nNote: ${f.message || "-"}`;
+    const text = `RSVP — ${binds.names}\nName: ${f.name}\nResponse: ${f.attending}\nGuests: ${f.guests}\nPhone: ${f.phone || "-"}\nMeal: ${f.meal || "-"}\nDietary: ${f.dietary || "-"}\nNote: ${f.message || "-"}`;
     const r = W.rsvp;
     try {
       if (r.mode === "formspree" && r.formspree) {

@@ -22,6 +22,9 @@ window.WEDDING = {
   //  whatsapp:  number in international format, no + (e.g. 27821234567)
   rsvp: { mode: "whatsapp", formspree: "", whatsapp: "27000000000", email: "rsvp@example.com" },
 
+  // Meal choices shown on the RSVP form (empty list hides the field)
+  meals: ["Chicken", "Lamb", "Vegetarian", "Vegan"],
+
   music: "", // e.g. "assets/audio/song.mp3" — leave blank to hide the music button
 
   events: [
