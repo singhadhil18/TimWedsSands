@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tim &amp; Sandeepa · Wedding Invitation</title>
+<meta name="description" content="Together with their families, Tim & Sandeepa invite you to celebrate their wedding.">
+<meta property="og:title" content="Tim & Sandeepa are getting married">
+<meta property="og:description" content="You're invited. Tap to open your invitation and RSVP.">
+<meta property="og:image" content="assets/img/og-cover.jpg">
+<meta name="theme-color" content="#1f2a24">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italiana&family=Pinyon+Script&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="is-sealed">
+
+<!-- ============ ENVELOPE INTRO ============ -->
+<div class="envelope-stage" id="envelope" aria-label="Open invitation">
+  <div class="envelope">
+    <div class="env-back"></div>
+    <div class="env-letter">
+      <span class="eyebrow">The wedding of</span>
+      <span class="script" data-bind="names">Tim &amp; Sandeepa</span>
+    </div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <button class="seal" id="openSeal" aria-label="Break the seal to open">
+      <span class="seal-mono" data-bind="monogram">T&amp;S</span>
+    </button>
+  </div>
+  <p class="env-hint">Tap the seal to open</p>
+  <p class="env-guest" id="guestGreeting" hidden></p>
+</div>
+
+<!-- ============ MUSIC TOGGLE ============ -->
+<button class="music" id="musicBtn" aria-label="Toggle music" hidden>
+  <span class="bars"><i></i><i></i><i></i><i></i></span>
+</button>
+<audio id="bgm" loop preload="none"></audio>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="#home" class="nav-mono" data-bind="monogram">T&amp;S</a>
+  <div class="nav-links">
+    <a href="#story">Story</a><a href="#events">Celebrations</a><a href="#venue">Venue</a><a href="#details">Details</a><a href="#rsvp" class="nav-cta">RSVP</a>
+  </div>
+</nav>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="hero-media">
+    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80" alt="" class="kenburns" data-ph>
+  </div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <p class="eyebrow reveal">Together with their families</p>
+    <h1 class="hero-names reveal">
+      <span class="n1" data-bind="partner1">Tim</span>
+      <span class="amp">&amp;</span>
+      <span class="n2" data-bind="partner2">Sandeepa</span>
+    </h1>
+    <p class="hero-sub reveal">request the pleasure of your company<br>as they begin their forever</p>
+    <div class="hero-date reveal">
+      <span data-bind="dayName">Saturday</span>
+      <span class="hd-big" data-bind="dateShort">12 · 06 · 27</span>
+      <span data-bind="city">Durban</span>
+    </div>
+  </div>
+  <a href="#countdown" class="scroll-cue" aria-label="Scroll"><span></span></a>
+</section>
+
+<!-- ============ COUNTDOWN ============ -->
+<section class="countdown section-ink" id="countdown">
+  <p class="eyebrow light reveal">Counting down to “I do”</p>
+  <div class="cd-grid reveal">
+    <div><b id="cdD">000</b><small>Days</small></div>
+    <div><b id="cdH">00</b><small>Hours</small></div>
+    <div><b id="cdM">00</b><small>Minutes</small></div>
+    <div><b id="cdS">00</b><small>Seconds</small></div>
+  </div>
+  <a class="btn btn-ghost reveal" id="addCal" href="#">Save the date to calendar</a>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="story" id="story">
+  <div class="story-head">
+    <p class="eyebrow reveal">Chapter one</p>
+    <h2 class="title reveal">Our <em>Story</em></h2>
+  </div>
+  <div class="story-grid">
+    <figure class="story-img a reveal"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="" data-ph></figure>
+    <figure class="story-img b reveal"><img src="https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=900&q=80" alt="" data-ph></figure>
+    <div class="story-text reveal">
+      <p class="dropcap">It began with a conversation that neither of us wanted to end. What started as a chance meeting quietly became late-night talks, shared playlists, and a thousand small moments that felt like home.</p>
+      <p>Years, adventures and countless cups of coffee later, one question and one very easy answer brought us here. We can’t imagine celebrating without the people who shaped us — and that means you.</p>
+      <p class="signoff script">Tim &amp; Sandeepa</p>
+    </div>
+  </div>
+  <ol class="timeline">
+    <li class="reveal"><span class="tl-year">2019</span><span class="tl-t">We met</span><span class="tl-d">Placeholder — where it all began.</span></li>
+    <li class="reveal"><span class="tl-year">2021</span><span class="tl-t">First adventure</span><span class="tl-d">Placeholder — a trip worth remembering.</span></li>
+    <li class="reveal"><span class="tl-year">2025</span><span class="tl-t">The question</span><span class="tl-d">Placeholder — the proposal story.</span></li>
+    <li class="reveal"><span class="tl-year">2027</span><span class="tl-t">Forever</span><span class="tl-d">And now, with you, the next chapter.</span></li>
+  </ol>
+</section>
+
+<!-- ============ QUOTE BAND ============ -->
+<section class="quote-band">
+  <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=2000&q=80" alt="" class="parallax" data-ph>
+  <blockquote class="reveal">“Whatever our souls are made of,<br>his and mine are the same.”<cite>— Emily Brontë</cite></blockquote>
+</section>
+
+<!-- ============ EVENTS ============ -->
+<section class="events" id="events">
+  <p class="eyebrow reveal">Join us for</p>
+  <h2 class="title reveal">The <em>Celebrations</em></h2>
+  <div class="event-list" id="eventList"><!-- rendered from config --></div>
+</section>
+
+<!-- ============ VENUE ============ -->
+<section class="venue section-ink" id="venue">
+  <div class="venue-grid">
+    <div class="venue-text">
+      <p class="eyebrow light reveal">The venue</p>
+      <h2 class="title light reveal" data-bind="venueName">Venue Name</h2>
+      <p class="venue-addr reveal" data-bind="venueAddress">Address placeholder, KwaZulu-Natal</p>
+      <div class="venue-btns reveal">
+        <a class="btn btn-gold" id="mapsBtn" target="_blank" rel="noopener">Google Maps</a>
+        <a class="btn btn-ghost" id="wazeBtn" target="_blank" rel="noopener">Waze</a>
+      </div>
+    </div>
+    <div class="venue-map reveal"><iframe id="mapFrame" title="Venue map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="gallery" id="gallery">
+  <p class="eyebrow reveal">Moments</p>
+  <h2 class="title reveal">A <em>Glimpse</em></h2>
+  <div class="gallery-track" id="galleryTrack"><!-- rendered from config --></div>
+</section>
+
+<!-- ============ DETAILS ============ -->
+<section class="details" id="details">
+  <p class="eyebrow reveal">Good to know</p>
+  <h2 class="title reveal">The <em>Details</em></h2>
+  <div class="details-grid">
+    <article class="card reveal"><span class="ic">✦</span><h3>Dress Code</h3><p data-bind="dressCode">Black tie optional. Think elegant evening wear in soft, neutral tones.</p><div class="swatches" id="swatches"></div></article>
+    <article class="card reveal"><span class="ic">❦</span><h3>Gifts</h3><p data-bind="gifts">Your presence is our present. Should you wish to honour us with a gift, a contribution to our honeymoon would be warmly appreciated.</p></article>
+    <article class="card reveal"><span class="ic">✧</span><h3>Stay</h3><p data-bind="stay">We’ve shortlisted nearby accommodation for out-of-town guests — details to follow.</p></article>
+  </div>
+  <div class="faq">
+    <details class="reveal"><summary>Are children welcome?</summary><p data-bind="faqKids">We love your little ones, but this will be an adults-only celebration.</p></details>
+    <details class="reveal"><summary>Is there parking at the venue?</summary><p data-bind="faqParking">Yes, secure parking is available on site.</p></details>
+    <details class="reveal"><summary>Can I bring a plus-one?</summary><p data-bind="faqPlusOne">Due to limited space, we can only accommodate guests named on the invitation.</p></details>
+    <details class="reveal"><summary>When should I RSVP by?</summary><p>Kindly respond by <strong data-bind="rsvpBy">1 May 2027</strong> so we can finalise numbers.</p></details>
+  </div>
+</section>
+
+<!-- ============ RSVP ============ -->
+<section class="rsvp section-ink" id="rsvp">
+  <div class="rsvp-card reveal">
+    <p class="eyebrow">Kindly respond by <span data-bind="rsvpBy">1 May 2027</span></p>
+    <h2 class="title">R.S.V.P</h2>
+    <form id="rsvpForm" novalidate>
+      <label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label>
+      <div class="attend">
+        <label><input type="radio" name="attending" value="Joyfully accepts" required><span>Joyfully accepts</span></label>
+        <label><input type="radio" name="attending" value="Regretfully declines"><span>Regretfully declines</span></label>
+      </div>
+      <div class="row2">
+        <label class="field"><span>Number of guests</span><select name="guests"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
+        <label class="field"><span>Phone</span><input name="phone" type="tel" autocomplete="tel"></label>
+      </div>
+      <label class="field"><span>Dietary requirements</span><input name="dietary" placeholder="Vegetarian, halal, allergies…"></label>
+      <label class="field"><span>A note for the couple</span><textarea name="message" rows="3"></textarea></label>
+      <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off">
+      <button class="btn btn-gold wide" type="submit">Send RSVP</button>
+      <p class="form-msg" id="formMsg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <span class="script big" data-bind="names">Tim &amp; Sandeepa</span>
+  <p class="eyebrow" data-bind="dateLong">12 June 2027</p>
+  <p class="hashtag" data-bind="hashtag">#TimWedsSands</p>
+</footer>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
