@@ -17,19 +17,34 @@
 
   // ---- personalised greeting: ?to=The%20Naidoo%20Family ----
   const to = new URLSearchParams(location.search).get("to");
-  if (to) { const g = $("#guestGreeting"); g.textContent = `Dear ${to}`; g.hidden = false; $("#rsvpForm [name=name]").value = to; }
+  if (to) { const g = $("#guestGreeting"); g.textContent = to; g.hidden = false; }
 
   // ---- image fallback (elegant gradient if a photo fails) ----
   const ph = img => { img.addEventListener("error", () => img.classList.add("ph-failed"), { once: true }); if (img.complete && !img.naturalWidth && img.src) img.classList.add("ph-failed"); };
 
-  // ---- envelope ----
-  const openInvite = () => {
-    document.body.classList.add("is-opening");
-    setTimeout(() => { document.body.classList.remove("is-sealed", "is-opening"); document.body.classList.add("is-open"); $("#envelope").remove(); }, 2300);
-    if (W.music) { const a = $("#bgm"); a.src = W.music; a.play().then(() => $("#musicBtn").classList.add("on")).catch(() => {}); }
+  // ---- music (fades in when the seal is opened; hidden if the file is missing) ----
+  const audio = $("#bgm"), mBtn = $("#musicBtn");
+  const fadeTo = (v, ms = 2500) => { const from = audio.volume, t0 = performance.now(); const step = t => { const k = Math.min(1, (t - t0) / ms); audio.volume = from + (v - from) * k; if (k < 1) requestAnimationFrame(step); else if (!v) audio.pause(); }; requestAnimationFrame(step); };
+  const startMusic = () => {
+    if (!W.music) return;
+    audio.src = W.music; audio.volume = 0;
+    audio.addEventListener("loadedmetadata", () => { if (W.musicStart) audio.currentTime = W.musicStart; }, { once: true });
+    audio.addEventListener("error", () => { mBtn.hidden = true; }, { once: true });
+    audio.play().then(() => { mBtn.hidden = false; mBtn.classList.add("on"); mBtn.setAttribute("aria-pressed", "true"); fadeTo(W.musicVolume ?? .6); }).catch(() => {});
   };
-  $("#openSeal").addEventListener("click", openInvite, { once: true });
-  if (W.music) { const b = $("#musicBtn"); b.hidden = false; b.onclick = () => { const a = $("#bgm"); if (a.paused) { a.play(); b.classList.add("on"); } else { a.pause(); b.classList.remove("on"); } }; }
+  mBtn.addEventListener("click", () => {
+    const on = audio.paused; mBtn.classList.toggle("on", on); mBtn.setAttribute("aria-pressed", String(on));
+    if (on) { audio.play(); fadeTo(W.musicVolume ?? .6, 800); } else fadeTo(0, 600);
+  });
+  document.addEventListener("visibilitychange", () => { if (document.hidden && !audio.paused) audio.pause(); else if (!document.hidden && mBtn.classList.contains("on")) audio.play().catch(() => {}); });
+
+  // ---- envelope ----
+  const main = $("#main"), navEl = $("#nav");
+  main.inert = navEl.inert = true;
+  $("#openSeal").addEventListener("click", () => {
+    document.body.classList.add("is-opening"); startMusic();
+    setTimeout(() => { document.body.classList.remove("is-sealed", "is-opening"); document.body.classList.add("is-open"); main.inert = navEl.inert = false; $("#envelope").remove(); }, 2300);
+  }, { once: true });
 
   // ---- countdown ----
   const tick = () => {
@@ -67,7 +82,8 @@
   const q = encodeURIComponent(W.mapsQuery || W.venueAddress);
   $("#mapsBtn").href = `https://www.google.com/maps/search/?api=1&query=${q}`;
   $("#wazeBtn").href = `https://waze.com/ul?q=${q}&navigate=yes`;
-  $("#mapFrame").src = `https://maps.google.com/maps?q=${q}&z=14&output=embed`;
+  $("#mapLoad").addEventListener("click", () => { $("#mapBox").innerHTML = `<iframe title="Venue map" loading="lazy" src="https://maps.google.com/maps?q=${q}&z=14&output=embed"></iframe>`; });
+  $("#feastList").innerHTML = (W.feast || []).map(x => `<li>${esc(x)}</li>`).join("");
 
   // ---- gallery & swatches ----
   $("#galleryTrack").innerHTML = W.gallery.map((src, i) => `<figure class="g g${i % 6}"><img src="${esc(src)}" alt="" data-ph loading="lazy"></figure>`).join("");
@@ -86,30 +102,37 @@
   };
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
-  // ---- meals ----
-  if (W.meals && W.meals.length) $("#mealSelect").innerHTML = W.meals.map(m => `<option>${esc(m)}</option>`).join("");
-  else $("#mealField").remove();
+  // ---- RSVP: attendee count + names -> Google Sheet + WhatsApp ----
+  const form = $("#rsvpForm"), msg = $("#formMsg"), out = $("#cntOut"), names = $("#guestNames"), party = $("#partyBlock");
+  const max = W.rsvp.maxGuests || 6; let count = 1;
+  const renderNames = () => {
+    out.textContent = count;
+    const old = [...names.querySelectorAll("input")].map(i => i.value);
+    names.innerHTML = Array.from({ length: count - 1 }, (_, i) => `<label class="field"><span>Guest ${i + 2} — full name</span><input name="guest${i + 2}" value="${esc(old[i] || "")}" required autocomplete="off"></label>`).join("");
+    $("#cntMinus").disabled = count <= 1; $("#cntPlus").disabled = count >= max;
+  };
+  $("#cntMinus").addEventListener("click", () => { count = Math.max(1, count - 1); renderNames(); });
+  $("#cntPlus").addEventListener("click", () => { count = Math.min(max, count + 1); renderNames(); });
+  form.addEventListener("change", e => { if (e.target.name === "attending") party.hidden = e.target.value.startsWith("Regret"); });
+  renderNames();
 
-  // ---- RSVP ----
-  const form = $("#rsvpForm"), msg = $("#formMsg");
-  form.addEventListener("submit", async e => {
+  form.addEventListener("submit", e => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(form));
     if (f._gotcha) return;
-    if (!f.name || !f.attending) { msg.textContent = "Please add your name and let us know if you can attend."; return; }
-    const text = `RSVP — ${binds.names}\nName: ${f.name}\nResponse: ${f.attending}\nGuests: ${f.guests}\nPhone: ${f.phone || "-"}\nMeal: ${f.meal || "-"}\nDietary: ${f.dietary || "-"}\nNote: ${f.message || "-"}`;
-    const r = W.rsvp;
-    try {
-      if (r.mode === "formspree" && r.formspree) {
-        const res = await fetch(r.formspree, { method: "POST", headers: { Accept: "application/json" }, body: new FormData(form) });
-        if (!res.ok) throw 0;
-      } else if (r.mode === "email") {
-        location.href = `mailto:${r.email}?subject=${encodeURIComponent("RSVP — " + f.name)}&body=${encodeURIComponent(text)}`;
-      } else {
-        window.open(`https://wa.me/${r.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
-      }
-      form.classList.add("sent");
-      msg.textContent = f.attending.startsWith("Joy") ? "Thank you! We can’t wait to celebrate with you." : "Thank you for letting us know — you’ll be missed.";
-    } catch { msg.textContent = "Something went wrong — please try again."; }
+    const coming = (f.attending || "").startsWith("Joy");
+    const guests = coming ? [f.name, ...[...names.querySelectorAll("input")].map(i => i.value.trim())] : [];
+    if (!f.name.trim() || !f.attending) { msg.textContent = "Please add your name and let us know if you can attend."; return; }
+    if (guests.some(g => !g)) { msg.textContent = "Please add a name for each attendee."; return; }
+    const n = coming ? guests.length : 0;
+    const text = `RSVP — ${binds.names}\nFrom: ${f.name.trim()}\nResponse: ${f.attending}` +
+      (coming ? `\nAttendees: ${n}\n${guests.map((g, i) => `${i + 1}. ${g}`).join("\n")}` : "") + (f.message ? `\nNote: ${f.message}` : "");
+    // 1) open WhatsApp first (must happen inside the tap, or browsers block it)
+    window.open(`https://wa.me/${W.rsvp.whatsapp}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    // 2) log to the Google Sheet in the background
+    if (W.rsvp.sheetUrl) fetch(W.rsvp.sheetUrl, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ name: f.name.trim(), attending: f.attending, count: n, guests: guests.join(", "), message: f.message || "", invitedAs: to || "", page: location.href }) }).catch(() => {});
+    form.classList.add("sent");
+    msg.textContent = coming ? "Thank you! Please press send in WhatsApp to confirm — we can’t wait to celebrate with you." : "Thank you for letting us know — please press send in WhatsApp. You’ll be missed.";
   });
 })();

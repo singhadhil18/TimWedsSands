@@ -17,15 +17,20 @@ window.WEDDING = {
 
   rsvpBy: "1 May 2027",
 
-  // RSVP delivery. mode: "formspree" | "whatsapp" | "email"
-  //  formspree: create a free form at formspree.io and paste its endpoint URL
-  //  whatsapp:  number in international format, no + (e.g. 27821234567)
-  rsvp: { mode: "whatsapp", formspree: "", whatsapp: "27000000000", email: "rsvp@example.com" },
+  // RSVP: opens WhatsApp with the reply pre-filled AND logs a row to a Google Sheet.
+  //  whatsapp: number in international format, no + (e.g. 27821234567)  — TBD
+  //  sheetUrl: the Google Apps Script web-app URL (see docs/google-sheet-setup.md) — blank = WhatsApp only
+  rsvp: { whatsapp: "27000000000", sheetUrl: "", maxGuests: 6 },
 
-  // Meal choices shown on the RSVP form (empty list hides the field)
-  meals: ["Chicken", "Lamb", "Vegetarian", "Vegan"],
+  // The feast
+  chefName: "To be announced",
+  chefNote: "Menu and bar details to follow",
+  feast: ["Canapés & chaat on arrival", "A grand Indian wedding banquet", "Traditional sweets & dessert table", "Signature cocktails & mocktails"],
 
-  music: "", // e.g. "assets/audio/song.mp3" — leave blank to hide the music button
+  // Music: starts when the seal is opened. musicStart = seconds to skip into the track.
+  music: "assets/audio/a-thousand-years.mp3",
+  musicStart: 0,
+  musicVolume: 0.6,
 
   events: [
     { name: "Mehndi & Haldi", date: "Thu, 10 June 2027", time: "16:00", place: "Family home", dress: "Shades of yellow & green",

@@ -9,9 +9,9 @@
 <meta property="og:description" content="You're invited. Tap to open your invitation and RSVP.">
 <meta property="og:image" content="assets/img/og-cover.jpg">
 <meta name="theme-color" content="#1f2a24">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italiana&family=Pinyon+Script&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/italiana-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/cormorant-garamond-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="is-sealed">
@@ -26,8 +26,8 @@
     </div>
     <div class="env-front"></div>
     <div class="env-flap"></div>
-    <button class="seal" id="openSeal" aria-label="Break the seal to open">
-      <span class="seal-mono" data-bind="monogram">T&amp;S</span>
+    <button class="seal" id="openSeal">
+      <span class="seal-mono" data-bind="monogram">T&amp;S</span><span class="sr"> — open the invitation</span>
     </button>
   </div>
   <p class="env-hint">Tap the seal to open</p>
@@ -35,7 +35,7 @@
 </div>
 
 <!-- ============ MUSIC TOGGLE ============ -->
-<button class="music" id="musicBtn" aria-label="Toggle music" hidden>
+<button class="music" id="musicBtn" aria-label="Music" aria-pressed="false" hidden>
   <span class="bars"><i></i><i></i><i></i><i></i></span>
 </button>
 <audio id="bgm" loop preload="none"></audio>
@@ -44,7 +44,7 @@
 <nav class="nav" id="nav">
   <a href="#home" class="nav-mono" data-bind="monogram">T&amp;S</a>
   <div class="nav-links">
-    <a href="#story">Story</a><a href="#events">Celebrations</a><a href="#venue">Venue</a><a href="#details">Details</a><a href="#rsvp" class="nav-cta">RSVP</a>
+    <a href="#story">Story</a><a href="#events">Celebrations</a><a href="#venue">Venue</a><a href="#feast">Feast</a><a href="#details">Details</a><a href="#rsvp" class="nav-cta">RSVP</a>
   </div>
 </nav>
 
@@ -53,7 +53,7 @@
 <!-- ============ HERO ============ -->
 <section class="hero" id="home">
   <div class="hero-media">
-    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80" alt="" class="kenburns" data-ph>
+    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000&q=80" alt="" class="kenburns" data-ph width="2000" height="1333" fetchpriority="high" decoding="async">
   </div>
   <div class="hero-veil"></div>
   <div class="hero-content">
@@ -92,8 +92,8 @@
     <h2 class="title reveal">Our <em>Story</em></h2>
   </div>
   <div class="story-grid">
-    <figure class="story-img a reveal"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="" data-ph></figure>
-    <figure class="story-img b reveal"><img src="https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=900&q=80" alt="" data-ph></figure>
+    <figure class="story-img a reveal"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="" data-ph width="900" height="1200" loading="lazy" decoding="async"></figure>
+    <figure class="story-img b reveal"><img src="https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=900&q=80" alt="" data-ph width="900" height="1200" loading="lazy" decoding="async"></figure>
     <div class="story-text reveal">
       <p class="dropcap">It began with a conversation that neither of us wanted to end. What started as a chance meeting quietly became late-night talks, shared playlists, and a thousand small moments that felt like home.</p>
       <p>Years, adventures and countless cups of coffee later, one question and one very easy answer brought us here. We can’t imagine celebrating without the people who shaped us — and that means you.</p>
@@ -110,7 +110,7 @@
 
 <!-- ============ QUOTE BAND ============ -->
 <section class="quote-band">
-  <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=2000&q=80" alt="" class="parallax" data-ph>
+  <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=2000&q=80" alt="" class="parallax" data-ph width="2000" height="1333" loading="lazy" decoding="async">
   <blockquote class="reveal">“Whatever our souls are made of,<br>his and mine are the same.”<cite>— Emily Brontë</cite></blockquote>
 </section>
 
@@ -133,7 +133,7 @@
         <a class="btn btn-ghost" id="wazeBtn" target="_blank" rel="noopener">Waze</a>
       </div>
     </div>
-    <div class="venue-map reveal"><iframe id="mapFrame" title="Venue map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+    <div class="venue-map reveal" id="mapBox"><button type="button" class="map-load" id="mapLoad"><span class="pin">⌖</span><span>Tap to view the map</span></button></div>
   </div>
 </section>
 
@@ -142,6 +142,24 @@
   <p class="eyebrow reveal">Moments</p>
   <h2 class="title reveal">A <em>Glimpse</em></h2>
   <div class="gallery-track" id="galleryTrack"><!-- rendered from config --></div>
+</section>
+
+<!-- ============ THE FEAST ============ -->
+<section class="feast section-ink" id="feast">
+  <div class="feast-grid">
+    <figure class="feast-img reveal"><img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=80" alt="" data-ph width="900" height="1200" loading="lazy" decoding="async"></figure>
+    <div class="feast-text">
+      <p class="eyebrow light reveal">A feast to remember</p>
+      <h2 class="title light reveal">The <em>Wedding Table</em></h2>
+      <p class="reveal" data-bind="feastIntro">Come hungry. An acclaimed chef and their brigade will be preparing a lavish spread of fine Indian wedding cuisine — slow-cooked curries, fragrant biryanis, tandoor-fired breads and sweets made the way our grandmothers made them.</p>
+      <div class="chef reveal">
+        <span class="chef-label">Your chef</span>
+        <span class="chef-name" data-bind="chefName">To be announced</span>
+        <span class="chef-note" data-bind="chefNote">Menu and bar details to follow</span>
+      </div>
+      <ul class="feast-list reveal" id="feastList"></ul>
+    </div>
+  </div>
 </section>
 
 <!-- ============ DETAILS ============ -->
@@ -167,20 +185,24 @@
     <p class="eyebrow">Kindly respond by <span data-bind="rsvpBy">1 May 2027</span></p>
     <h2 class="title">R.S.V.P</h2>
     <form id="rsvpForm" novalidate>
-      <label class="field"><span>Full name</span><input name="name" required autocomplete="name"></label>
-      <div class="attend">
+      <label class="field"><span>Your full name</span><input name="name" required autocomplete="name"></label>
+      <fieldset class="attend"><legend class="sr">Will you attend?</legend>
         <label><input type="radio" name="attending" value="Joyfully accepts" required><span>Joyfully accepts</span></label>
         <label><input type="radio" name="attending" value="Regretfully declines"><span>Regretfully declines</span></label>
+      </fieldset>
+      <div id="partyBlock">
+        <div class="field"><span id="cntLabel">Number of attendees (including you)</span>
+          <div class="stepper" role="group" aria-labelledby="cntLabel">
+            <button type="button" id="cntMinus" aria-label="Fewer attendees">−</button>
+            <output id="cntOut" aria-live="polite">1</output>
+            <button type="button" id="cntPlus" aria-label="More attendees">+</button>
+          </div>
+        </div>
+        <div id="guestNames" class="guest-names"></div>
       </div>
-      <div class="row2">
-        <label class="field"><span>Number of guests</span><select name="guests"><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
-        <label class="field"><span>Phone</span><input name="phone" type="tel" autocomplete="tel"></label>
-      </div>
-      <label class="field" id="mealField"><span>Meal preference</span><select name="meal" id="mealSelect"></select></label>
-      <label class="field"><span>Dietary requirements</span><input name="dietary" placeholder="Vegetarian, halal, allergies…"></label>
-      <label class="field"><span>A note for the couple</span><textarea name="message" rows="3"></textarea></label>
-      <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off">
-      <button class="btn btn-gold wide" type="submit">Send RSVP</button>
+      <label class="field"><span>A note for the couple (optional)</span><textarea name="message" rows="2"></textarea></label>
+      <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="btn btn-gold wide" type="submit">Send RSVP via WhatsApp</button>
       <p class="form-msg" id="formMsg" role="status"></p>
     </form>
   </div>
@@ -193,7 +215,7 @@
 </footer>
 </main>
 
-<script src="assets/js/config.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/main.js" defer></script>
 </body>
 </html>
