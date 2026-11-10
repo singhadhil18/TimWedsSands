@@ -12,22 +12,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Option A — SSH (secrets: SSH_HOST, SSH_USER, SSH_PRIVATE_KEY; optional var SSH_PORT, DEPLOY_PATH)
-      - name: Deploy over SSH (rsync)
+      # Option A — SSH (secret: SSH_PRIVATE_KEY; optional secrets/vars SSH_HOST, SSH_USER, SSH_PORT, DEPLOY_PATH)
+      # The host has no rsync, so the site is sent as one tar archive and unpacked in place.
+      - name: Deploy over SSH
         if: env.HAS_SSH == 'true'
         env:
           KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOST: ${{ secrets.SSH_HOST }}
-          USER: ${{ secrets.SSH_USER }}
-          PORT: ${{ vars.SSH_PORT || '22' }}
-          DEST: ${{ vars.DEPLOY_PATH || 'domains/timoanwedssandipa.co.za/public_html/' }}
+          HOST: ${{ secrets.SSH_HOST || vars.SSH_HOST || 'server5.webhostmost.com' }}
+          USER: ${{ secrets.SSH_USER || vars.SSH_USER || 'xesuzeeq' }}
+          PORT: ${{ vars.SSH_PORT || '2323' }}
+          DEST: ${{ vars.DEPLOY_PATH || 'domains/timoanwedssandipa.co.za/public_html' }}
         run: |
           install -m 700 -d ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts
-          rsync -az --delete-after -e "ssh -i ~/.ssh/id_deploy -p $PORT" \
-            --exclude '.git*' --exclude '.github' --exclude 'docs' --exclude 'README.md' --exclude '.cpanel.yml' \
-            ./ "$USER@$HOST:$DEST"
+          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          tar -czf - index.html favicon.ico .htaccess admin.html assets \
+            | ssh -i ~/.ssh/id_deploy -p "$PORT" -o BatchMode=yes "$USER@$HOST" \
+                "mkdir -p '$DEST' && tar -xzf - -C '$DEST' && echo 'Deployed to $DEST'"
 
       # Option B — FTP (secrets: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD; optional var FTP_DIR)
       - name: Deploy over FTPS
