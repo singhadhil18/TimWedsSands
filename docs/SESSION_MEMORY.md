@@ -27,7 +27,7 @@ _Last updated: 2026-11-09. Keep this file current each session._
 ## Update 2026-11-10 (later)
 - Host: WebHostMost. Owner wants deploys pulled from GitHub; `main` branch created as the deploy branch.
 - Domain found via registry email: **timoanwedssandipa.co.za** (registered 2026-11-09) — a full domain, not a subdomain. Suggests the couple may be "Timoan & Sandipa"; names on site still "Tim & Sandipa" pending confirmation.
-- Bride’s name confirmed: **Sandipa** (2026-11-10). Groom: "Tim" vs "Timoan" still to confirm.
+- Bride’s name confirmed: **Sandipa** (2026-11-10). Groom: **Timoan** (full name). Nicknames Tim & Sands — kept in hashtag #TimWedsSands.
 - Design brief: pastel, romantic and warm. Added warm rose/peach palette, falling petals, warmer wording.
 
 ## Decisions so far

@@ -2,7 +2,7 @@
    EDIT EVERYTHING HERE — no other file needs changing.
    ========================================================= */
 window.WEDDING = {
-  partner1: "Tim",
+  partner1: "Timoan",
   partner2: "Sandipa",
   monogram: "T&S",
   hashtag: "#TimWedsSands",
