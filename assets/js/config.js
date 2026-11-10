@@ -60,8 +60,10 @@ window.WEDDING = {
   // ---- Family invites (Supabase) ----
   // Paste from Supabase → Project Settings → API. The anon/publishable key is safe to publish;
   // NEVER put the service_role/secret key here. Leave blank to use the WhatsApp-only RSVP.
-  supabase: { url: "", anonKey: "" },
+  supabase: { url: "https://ltjtvtibqjxjolalhusv.supabase.co", anonKey: "sb_publishable_Kz5XoxjPeVxlzRtLq7srrg_MJCBI0Rq" },
   siteUrl: "https://timoanwedssandipa.co.za",
+  // Shared admin account used by the admin code login (create it in Supabase; the code is its password)
+  adminEmail: "admin@timoanwedssandipa.co.za",
 
   // The message admins copy / send on WhatsApp for each family (admin page).
   // {family} {seats} {guests} ("1 guest" / "4 guests") {deadline} {link}

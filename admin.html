@@ -65,15 +65,15 @@ pre.preview{white-space:pre-wrap;font-family:inherit;background:#fff;border:1px 
 
   <section id="loginView" class="card login" hidden>
     <h1>Guest List</h1>
-    <p>Admins only. Enter your email and we’ll send you a sign-in link.</p>
-    <form id="loginForm"><input type="email" id="loginEmail" required placeholder="you@example.com" autocomplete="email"><button class="btn" type="submit">Email me a sign-in link</button></form>
+    <p>Admins only. Enter the admin code.</p>
+    <form id="loginForm"><input type="password" id="loginCode" required placeholder="Admin code" autocomplete="current-password"><button class="btn" type="submit">Sign in</button></form>
     <p class="msg" id="loginMsg" role="status"></p>
   </section>
 
   <section id="appView" hidden>
     <header>
       <h1>Timoan &amp; Sandipa · Guest List</h1>
-      <div class="acts"><button class="btn ghost" id="csvBtn">Export CSV</button><button class="btn ghost" id="refreshBtn">Refresh</button><button class="btn ghost" id="logoutBtn">Sign out</button></div>
+      <div class="acts"><button class="btn ghost" id="guestListBtn">Copy guest list</button><button class="btn ghost" id="csvBtn">Export CSV</button><button class="btn ghost" id="refreshBtn">Refresh</button><button class="btn ghost" id="logoutBtn">Sign out</button></div>
     </header>
 
     <div class="stats" id="stats"></div>
@@ -147,9 +147,10 @@ pre.preview{white-space:pre-wrap;font-family:inherit;background:#fff;border:1px 
 
   // ---------- auth ----------
   $("#loginForm").addEventListener("submit", async e => {
-    e.preventDefault(); const m = $("#loginMsg"); m.textContent = "Sending…";
-    const { error } = await sb.auth.signInWithOtp({ email: $("#loginEmail").value.trim(), options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } });
-    m.textContent = error ? (/signups|not allowed|not found/i.test(error.message) ? "This email isn’t set up as an admin." : error.message) : "Check your email for the sign-in link.";
+    e.preventDefault(); const m = $("#loginMsg"); m.textContent = "Signing in…";
+    // the code is checked by Supabase (password of the shared admin account) — never in this page
+    const { error } = await sb.auth.signInWithPassword({ email: W.adminEmail, password: $("#loginCode").value });
+    m.textContent = error ? (/invalid/i.test(error.message) ? "Wrong code." : error.message) : "";
   });
   $("#logoutBtn").addEventListener("click", async () => { await sb.auth.signOut(); show("loginView"); });
   const start = async session => {
@@ -262,6 +263,18 @@ pre.preview{white-space:pre-wrap;font-family:inherit;background:#fff;border:1px 
     }
     if (a === "reset" && confirm(`Clear ${r.family}'s reply? They can RSVP again from their link. (History is kept.)`)) { await sb.from("rsvps").delete().eq("slug", r.slug); load(); }
     if (a === "del" && confirm(`Delete ${r.family} and their reply? Their link will stop working. This can't be undone.`)) { await sb.from("invites").delete().eq("slug", r.slug); load(); }
+  });
+
+  // ---------- copy guest list (everyone coming, grouped by family — pastes cleanly into WhatsApp, Notes or a seating plan) ----------
+  $("#guestListBtn").addEventListener("click", e => {
+    const btn = e.currentTarget, coming = data.filter(r => status(r.reply) === "yes");
+    if (!coming.length) { const o = btn.textContent; btn.textContent = "No one coming yet"; setTimeout(() => btn.textContent = o, 1600); return; }
+    const total = coming.reduce((s, r) => s + r.reply.guest_count, 0);
+    const blocks = coming.map(r => {
+      const names = (r.reply.guests || []).filter(Boolean), missing = r.reply.guest_count - names.length;
+      return [`${r.family} (${r.reply.guest_count})`, ...names, ...(missing > 0 ? [`+ ${missing} unnamed`] : [])].join("\n");
+    });
+    copy([`Guest list — ${total} coming from ${coming.length} ${coming.length === 1 ? "family" : "families"}`, ...blocks].join("\n\n"), btn);
   });
 
   // ---------- CSV ----------
