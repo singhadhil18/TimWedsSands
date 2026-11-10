@@ -24,6 +24,11 @@ _Last updated: 2026-11-09. Keep this file current each session._
 - Deployment: GitHub Actions FTP workflow added (`.github/workflows/deploy.yml`); needs repo secrets FTP_SERVER, FTP_USERNAME, FTP_PASSWORD (+ optional variable FTP_DIR). Not yet live.
 - Preview copies uploaded to Google Drive: AceSite / Tim & Sandeepa Wedding Invite.
 
+## Update 2026-11-10 (later)
+- Host: WebHostMost. Owner wants deploys pulled from GitHub; `main` branch created as the deploy branch.
+- Domain found via registry email: **timoanwedssandipa.co.za** (registered 2026-11-09) — a full domain, not a subdomain. Suggests the couple may be "Timoan & Sandipa"; names on site still "Tim & Sandeepa" pending confirmation.
+- Design brief: pastel, romantic and warm. Added warm rose/peach palette, falling petals, warmer wording.
+
 ## Decisions so far
 - Design: envelope + wax seal intro, forest green / ivory / champagne gold, Italiana + Cormorant Garamond + Pinyon Script + Jost (self-hosted).
 - Music starts on seal tap (browsers block autoplay before a tap), fades in; `musicStart` offsets into the track.

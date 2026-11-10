@@ -41,7 +41,7 @@ window.WEDDING = {
       img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80" }
   ],
 
-  palette: ["#f7e4df", "#e4ecdf", "#ebe6f1", "#fbecd9", "#b98a5e"],
+  palette: ["#f9e1dc", "#fde9d6", "#e9eee0", "#f3e6ec", "#a85a66"],
 
   gallery: [
     "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=900&q=80",

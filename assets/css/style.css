@@ -355,3 +355,25 @@ figure,.hero-media,.quote-band{background:linear-gradient(135deg,#f3d9d2,#e8dcc6
 .footer{background:var(--mandala) center/420px no-repeat,var(--paper)}
 .kenburns{will-change:transform}
 .hero-content::before{opacity:.9}
+
+/* ===== v4: romantic & warm ===== */
+:root{--paper:#fffaf5;--paper-2:#fbf1ea;--blush:#f9e1dc;--peach:#fde9d6;--sage:#e9eee0;--lilac:#f3e6ec;--rose:#a85a66;--ink:#4a2f38;--text:#4a363c;--muted:#6d575c}
+.hero-veil{background:linear-gradient(180deg,rgba(96,48,60,.55),rgba(120,62,70,.3) 45%,rgba(84,40,52,.72))}
+.hero-media,.quote-band{background:linear-gradient(160deg,#e9a9a0,#d98c8c 45%,#b06a78)}
+.quote-band::after{background:rgba(96,48,60,.45)}
+.hero-names .amp{color:#ffd9cf}
+.hero-sub{font-size:clamp(1.15rem,2.1vw,1.5rem)}
+.envelope-stage{background:var(--mandala) center/min(150vw,900px) no-repeat,radial-gradient(ellipse at 50% 38%,#fff6f1,#fbe3dd 55%,#f3cfc9)}
+.countdown{background:linear-gradient(180deg,var(--blush),var(--peach))}
+.venue{background:var(--sage)}
+.card,.rsvp-card{border-radius:2px;box-shadow:0 18px 50px rgba(168,90,102,.1)}
+.footer-line{font-style:italic;color:var(--muted);margin-bottom:.4rem}
+.petals{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.petals i{position:absolute;top:-6%;width:14px;height:18px;border-radius:80% 0 80% 0;background:linear-gradient(135deg,#ffe3dc,#f4b6b4);opacity:.75;animation:petal 14s linear infinite;will-change:transform}
+.petals i:nth-child(1){left:6%;animation-delay:-2s}.petals i:nth-child(2){left:18%;animation-duration:17s;animation-delay:-9s;scale:.7}
+.petals i:nth-child(3){left:31%;animation-duration:12s;animation-delay:-5s}.petals i:nth-child(4){left:44%;animation-duration:19s;animation-delay:-13s;scale:.8}
+.petals i:nth-child(5){left:57%;animation-delay:-7s;scale:1.1}.petals i:nth-child(6){left:68%;animation-duration:16s;animation-delay:-1s;scale:.6}
+.petals i:nth-child(7){left:79%;animation-duration:13s;animation-delay:-10s}.petals i:nth-child(8){left:90%;animation-duration:18s;animation-delay:-4s;scale:.9}
+.petals i:nth-child(9){left:50%;animation-duration:21s;animation-delay:-16s;scale:.5}
+@keyframes petal{to{transform:translate3d(9vw,112vh,0) rotate(540deg)}}
+.is-sealed .petals i,.is-sealed .kenburns{animation-play-state:paused}

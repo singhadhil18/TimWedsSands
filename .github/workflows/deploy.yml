@@ -1,14 +1,18 @@
 name: Deploy to web host
 on:
   push:
-    branches: [main, claude/sweet-cerf-8qohwu]
+    branches: [main]
   workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HAS_FTP: ${{ secrets.FTP_SERVER != '' }}
     steps:
       - uses: actions/checkout@v4
+        if: env.HAS_FTP == 'true'
       - name: Upload site over FTPS
+        if: env.HAS_FTP == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
