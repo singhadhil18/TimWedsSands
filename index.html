@@ -367,6 +367,10 @@ figure,.hero-media,.quote-band{background:linear-gradient(135deg,#f3d9d2,#e8dcc6
 .form-after{display:flex;flex-wrap:wrap;gap:.8rem 1.4rem;justify-content:center;align-items:center;margin-top:1.2rem}
 .link-btn{background:none;border:0;padding:.6rem .2rem;font:inherit;font-family:var(--sans);font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-d);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
 .music{bottom:calc(1.2rem + env(safe-area-inset-bottom))}
+.env-guest{min-height:1.3em}
+.rsvp-note{text-align:center;font-style:italic;font-size:1.15rem;color:var(--ink);margin:-.4rem 0 1.6rem}
+.rsvp-note b{font-style:normal;font-family:var(--display);font-weight:400;color:var(--rose);font-size:1.25em}
+.rsvp-locked form{display:none}
 </style>
 </head>
 <body class="is-sealed">
@@ -387,7 +391,7 @@ figure,.hero-media,.quote-band{background:linear-gradient(135deg,#f3d9d2,#e8dcc6
     </button>
   </div>
   <p class="env-hosts"><span data-bind="hosts">The Viriah and Sukhnundan families</span><br>welcome you</p>
-  <p class="env-guest" id="guestGreeting" hidden></p>
+  <p class="env-guest" id="guestGreeting"></p>
 </div>
 
 <!-- ============ MUSIC TOGGLE ============ -->
@@ -547,6 +551,7 @@ figure,.hero-media,.quote-band{background:linear-gradient(135deg,#f3d9d2,#e8dcc6
   <div class="rsvp-card reveal">
     <p class="eyebrow">Kindly respond by <span data-bind="rsvpBy">1 May 2027</span></p>
     <h2 class="title">R.S.V.P</h2>
+    <p class="rsvp-note" id="rsvpNote" hidden></p>
     <form id="rsvpForm" novalidate>
       <label class="field"><span>Your full name</span><input name="name" required autocomplete="name"></label>
       <fieldset class="attend"><legend class="sr">Will you attend?</legend>

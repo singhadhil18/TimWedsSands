@@ -15,9 +15,19 @@
   $$("[data-bind]").forEach(el => { const v = binds[el.dataset.bind]; if (typeof v === "string") el.textContent = v; });
   document.title = `${binds.names} · Wedding Invitation`;
 
-  // ---- personalised greeting: ?to=The%20Naidoo%20Family ----
-  const to = new URLSearchParams(location.search).get("to");
-  if (to) { const g = $("#guestGreeting"); g.textContent = to; g.hidden = false; }
+  // ---- family invites: timoanwedssandipa.co.za/naidoo (or ?i=naidoo when testing locally) ----
+  const qs = new URLSearchParams(location.search);
+  const SB = W.supabase && W.supabase.url && W.supabase.anonKey ? W.supabase : null;
+  const slug = (qs.get("i") || decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "").replace(/(^|\/)index\.html$/, "")).toLowerCase();
+  const rpc = (fn, body) => fetch(`${SB.url.replace(/\/$/, "")}/rest/v1/rpc/${fn}`, {
+    method: "POST", headers: { apikey: SB.anonKey, "Content-Type": "application/json" }, body: JSON.stringify(body)
+  }).then(async r => { const j = await r.json().catch(() => null); if (!r.ok) throw new Error((j && (j.message || j.hint)) || r.statusText); return j; });
+  let invite = null;
+  const inviteReady = SB && /^[a-z0-9-]+$/.test(slug) ? rpc("get_invite", { p_slug: slug }).then(j => { invite = j; }).catch(() => {}) : Promise.resolve();
+  // legacy personal greeting: ?to=The%20Naidoo%20Family
+  const to = qs.get("to");
+  const greet = name => { if (name) $("#guestGreeting").textContent = name; };
+  greet(to);
 
   // ---- responsive images: Unsplash placeholders are cropped to each slot's shape and served
   //      at the phone's real pixel density (AVIF/WebP). Your own photos (local files) are used
@@ -184,7 +194,7 @@
 
   // ---- RSVP: attendee count + names -> Google Sheet + WhatsApp ----
   const form = $("#rsvpForm"), msg = $("#formMsg"), out = $("#cntOut"), names = $("#guestNames"), party = $("#partyBlock");
-  const max = W.rsvp.maxGuests || 6; let count = 1;
+  let max = W.rsvp.maxGuests || 6, count = 1;
   const renderNames = () => {
     out.textContent = count;
     const old = [...names.querySelectorAll("input")].map(i => i.value);
@@ -196,14 +206,50 @@
   form.addEventListener("change", e => { if (e.target.name === "attending") party.hidden = e.target.value.startsWith("Regret"); });
   renderNames();
 
-  form.addEventListener("submit", e => {
+  // with Supabase on: the family's seat limit comes from their link; no link = no RSVP form
+  const note = $("#rsvpNote"), card = $(".rsvp-card");
+  const plural = n => `${n} guest${n === 1 ? "" : "s"}`;
+  if (SB) inviteReady.then(() => {
+    note.hidden = false;
+    if (!invite) {
+      card.classList.add("rsvp-locked");
+      note.textContent = "To RSVP, please open the personal invitation link we sent your family.";
+      return;
+    }
+    greet(invite.family);
+    max = invite.seats; count = Math.min(count, max); renderNames();
+    note.innerHTML = `Dear ${esc(invite.family)}, your invitation admits <b>${plural(invite.seats)}</b>.` +
+      (invite.replied ? `<br>We have your reply (${invite.attending ? `${plural(invite.count)} attending` : "unable to attend"}) — you can update it below.` : "");
+    if (!invite.open) { card.classList.add("rsvp-locked"); note.innerHTML += "<br>RSVPs have now closed — please contact the couple for any changes."; }
+  });
+
+  const errText = { unknown_invite: "We couldn’t find your invitation link — please use the link we sent you.", rsvp_closed: "RSVPs have now closed — please contact the couple.",
+    too_many_guests: "That’s more guests than your invitation admits.", no_guests: "Please add at least one attendee.", no_name: "Please add your name.", too_long: "Some details are too long — please shorten them." };
+  const saveToDb = async (f, coming, guests) => {
+    const btn = form.querySelector("[type=submit]"); btn.disabled = true; msg.textContent = "Sending your reply…";
+    try {
+      await rpc("submit_rsvp", { p_slug: slug, p_responder: f.name.trim(), p_attending: coming, p_guests: coming ? guests : [], p_message: f.message || "" });
+      form.classList.add("sent");
+      const wa = `https://wa.me/${W.rsvp.whatsapp}?text=${encodeURIComponent(`RSVP — ${invite.family}\n${coming ? `${plural(guests.length)}: ${guests.join(", ")}` : "Regretfully declines"}${f.message ? `\nNote: ${f.message}` : ""}`)}`;
+      msg.innerHTML = (coming ? "Thank you — your reply is saved. We can’t wait to celebrate with you!" : "Thank you for letting us know — your reply is saved. You’ll be missed.") +
+        `<span class="form-after">${W.rsvp.whatsapp ? `<a class="btn btn-ghost" href="${esc(wa)}" target="_blank" rel="noopener">Also message the couple</a>` : ""}<button type="button" class="link-btn" id="editRsvp">Edit my reply</button></span>`;
+      $("#editRsvp").addEventListener("click", () => { form.classList.remove("sent"); msg.textContent = ""; });
+    } catch (err) {
+      const k = Object.keys(errText).find(k => String(err.message).includes(k));
+      msg.textContent = k ? errText[k] : "Sorry, we couldn’t save your reply — please check your connection and try again.";
+    } finally { btn.disabled = false; }
+  };
+
+  form.addEventListener("submit", async e => {
     e.preventDefault();
+    if (SB) await inviteReady;
     const f = Object.fromEntries(new FormData(form));
     if (f._gotcha) return;
     const coming = (f.attending || "").startsWith("Joy");
     const guests = coming ? [f.name, ...[...names.querySelectorAll("input")].map(i => i.value.trim())] : [];
     if (!f.name.trim() || !f.attending) { msg.textContent = "Please add your name and let us know if you can attend."; return; }
     if (guests.some(g => !g)) { msg.textContent = "Please add a name for each attendee."; return; }
+    if (SB) { if (invite) saveToDb(f, coming, guests); return; }
     const n = coming ? guests.length : 0;
     const text = `RSVP — ${binds.names}\nFrom: ${f.name.trim()}\nResponse: ${f.attending}` +
       (coming ? `\nAttendees: ${n}\n${guests.map((g, i) => `${i + 1}. ${g}`).join("\n")}` : "") + (f.message ? `\nNote: ${f.message}` : "");

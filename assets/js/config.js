@@ -55,5 +55,27 @@ window.WEDDING = {
     "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=900&q=80",
     "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=80",
     "https://images.unsplash.com/photo-1525258946800-98cfd641d0de?auto=format&fit=crop&w=900&q=80"
-  ]
+  ],
+
+  // ---- Family invites (Supabase) ----
+  // Paste from Supabase → Project Settings → API. The anon/publishable key is safe to publish;
+  // NEVER put the service_role/secret key here. Leave blank to use the WhatsApp-only RSVP.
+  supabase: { url: "", anonKey: "" },
+  siteUrl: "https://timoanwedssandipa.co.za",
+
+  // The message admins copy / send on WhatsApp for each family (admin page).
+  // {family} {seats} {guests} ("1 guest" / "4 guests") {deadline} {link}
+  inviteMessage:
+`Dear {family}
+
+It brings us immense joy to share our wedding invitation with you. We would be truly honoured if you could join us in celebrating this cherished occasion.
+
+Your invitation admits {guests}. Kindly RSVP by {deadline} so we may prepare for this special day together.
+
+We look forward with great excitement to creating beautiful memories in your company.
+
+With all our love,
+Timoan & Sandipa
+
+{link}`
 };
