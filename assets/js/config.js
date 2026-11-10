@@ -27,9 +27,10 @@ window.WEDDING = {
   chefNote: "Menu and bar details to follow",
   feast: ["Canapés & chaat on arrival", "A grand Indian wedding banquet", "Traditional sweets & dessert table", "Signature cocktails & mocktails"],
 
-  // Music: starts when the seal is opened. musicStart = seconds to skip into the track.
+  // Music: tries to start on page load, otherwise on the first scroll / swipe / tap.
+  // musicStart = seconds to skip into the track.
   music: "assets/audio/a-thousand-years.mp3",
-  musicStart: 0,
+  musicStart: 20,
   musicVolume: 0.6,
 
   events: [

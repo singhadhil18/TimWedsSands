@@ -32,7 +32,7 @@ _Last updated: 2026-11-09. Keep this file current each session._
 
 ## Decisions so far
 - Design: envelope + wax seal intro, forest green / ivory / champagne gold, Italiana + Cormorant Garamond + Pinyon Script + Jost (self-hosted).
-- Music starts on seal tap (browsers block autoplay before a tap), fades in; `musicStart` offsets into the track.
+- Music tries to autoplay on load, else starts on first scroll/swipe/tap/key (incl. seal tap), fades in; `musicStart` offsets into the track.
 - Map loads on tap (keeps the page fast and avoids Google cookies until asked).
 - Personalised links: `?to=Guest%20Name`.
 
@@ -42,7 +42,7 @@ _Last updated: 2026-11-09. Keep this file current each session._
 3. ~~RSVP WhatsApp number~~ done.
 4. Confirm events list (Mehndi / Sangeet / Ceremony / Reception?) and dress codes.
 5. Chef name, credentials, menu and bar details.
-6. Add the song file to `assets/audio/a-thousand-years.mp3`; then set `musicStart`.
+6. ~~Song file~~ done 2026-11-10: Brooklyn Duo "A Thousand Years (Wedding Version)", starts at 20s, autoplays on load or first scroll/tap. 12 MB @320kbps — consider re-encoding to ~128kbps (~5 MB).
 7. Owner to deploy the Apps Script and paste the URL (see `docs/google-sheet-setup.md`).
 8. Couple's photos (hero landscape ≥2000px, portraits ≥900px) + their real story text.
 9. Confirm domain spelling; create subdomain, upload, enable SSL.

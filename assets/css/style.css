@@ -262,7 +262,7 @@ form.sent>*:not(.form-msg){opacity:.35;pointer-events:none}
 .hashtag{font-family:var(--sans);letter-spacing:.2em;color:var(--muted);margin-top:.8rem;font-size:.85rem}
 
 /* ========== Music ========== */
-.music{position:fixed;right:1.2rem;bottom:1.2rem;z-index:60;width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:rgba(247,242,233,.85);backdrop-filter:blur(8px);cursor:pointer;display:grid;place-items:center}
+.music{position:fixed;right:1.2rem;bottom:1.2rem;z-index:110;width:46px;height:46px;border-radius:50%;border:1px solid var(--gold);background:rgba(247,242,233,.85);backdrop-filter:blur(8px);cursor:pointer;display:grid;place-items:center}
 .bars{display:flex;gap:3px;align-items:flex-end;height:16px}
 .bars i{width:2px;height:4px;background:var(--gold)}
 .music.on .bars i{animation:eq 1s ease-in-out infinite}

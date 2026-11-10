@@ -22,19 +22,33 @@
   // ---- image fallback (elegant gradient if a photo fails) ----
   const ph = img => { img.addEventListener("error", () => img.classList.add("ph-failed"), { once: true }); if (img.complete && !img.naturalWidth && img.src) img.classList.add("ph-failed"); };
 
-  // ---- music (fades in when the seal is opened; hidden if the file is missing) ----
-  const audio = $("#bgm"), mBtn = $("#musicBtn");
-  const fadeTo = (v, ms = 2500) => { const from = audio.volume, t0 = performance.now(); const step = t => { const k = Math.min(1, (t - t0) / ms); audio.volume = from + (v - from) * k; if (k < 1) requestAnimationFrame(step); else if (!v) audio.pause(); }; requestAnimationFrame(step); };
-  const startMusic = () => {
-    if (!W.music) return;
-    audio.src = W.music; audio.volume = 0;
-    audio.addEventListener("loadedmetadata", () => { if (W.musicStart) audio.currentTime = W.musicStart; }, { once: true });
-    audio.addEventListener("error", () => { mBtn.hidden = true; }, { once: true });
-    audio.play().then(() => { mBtn.hidden = false; mBtn.classList.add("on"); mBtn.setAttribute("aria-pressed", "true"); fadeTo(W.musicVolume ?? .6); }).catch(() => {});
+  // ---- music: tries to play on page load, then on the first scroll / swipe / tap / key.
+  //      Browsers only allow sound after the guest interacts, so we keep retrying until one works.
+  const audio = $("#bgm"), mBtn = $("#musicBtn"), vol = W.musicVolume ?? .6;
+  let fadeTimer;
+  const fadeTo = (v, ms = 2500) => {
+    clearInterval(fadeTimer); const from = audio.volume, t0 = performance.now();
+    fadeTimer = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); audio.volume = from + (v - from) * k; if (k === 1) { clearInterval(fadeTimer); if (!v) audio.pause(); } }, 40);
   };
+  const setBtn = on => { mBtn.hidden = false; mBtn.classList.toggle("on", on); mBtn.setAttribute("aria-pressed", String(on)); };
+  const wakeEvents = ["pointerdown", "touchstart", "touchend", "keydown", "click", "wheel", "touchmove", "scroll"];
+  let playing = false, lastTry = 0;
+  const unbind = () => wakeEvents.forEach(ev => removeEventListener(ev, startMusic, true));
+  function startMusic(e) {
+    if (!W.music || playing) return;
+    // scroll/wheel/touchmove fire constantly — only retry those a few times a second
+    const now = performance.now(); if (e && /wheel|move|scroll/.test(e.type) && now - lastTry < 250) return; lastTry = now;
+    if (!audio.src) {
+      audio.src = W.music; audio.volume = 0;
+      audio.addEventListener("loadedmetadata", () => { if (W.musicStart && audio.currentTime < W.musicStart) audio.currentTime = W.musicStart; }, { once: true });
+      audio.addEventListener("error", () => { playing = true; unbind(); mBtn.hidden = true; }, { once: true });
+    }
+    audio.play().then(() => { if (playing) return; playing = true; unbind(); setBtn(true); fadeTo(vol); }).catch(() => {});
+  }
+  if (W.music) { audio.preload = "auto"; wakeEvents.forEach(ev => addEventListener(ev, startMusic, { capture: true, passive: true })); startMusic(); }
   mBtn.addEventListener("click", () => {
-    const on = audio.paused; mBtn.classList.toggle("on", on); mBtn.setAttribute("aria-pressed", String(on));
-    if (on) { audio.play(); fadeTo(W.musicVolume ?? .6, 800); } else fadeTo(0, 600);
+    const on = audio.paused || mBtn.getAttribute("aria-pressed") !== "true"; setBtn(on);
+    if (on) { audio.play().catch(() => {}); fadeTo(vol, 800); } else fadeTo(0, 600);
   });
   document.addEventListener("visibilitychange", () => { if (document.hidden && !audio.paused) audio.pause(); else if (!document.hidden && mBtn.classList.contains("on")) audio.play().catch(() => {}); });
 
