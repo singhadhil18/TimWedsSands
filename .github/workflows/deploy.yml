@@ -7,12 +7,31 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      HAS_SSH: ${{ secrets.SSH_PRIVATE_KEY != '' }}
       HAS_FTP: ${{ secrets.FTP_SERVER != '' }}
     steps:
       - uses: actions/checkout@v4
-        if: env.HAS_FTP == 'true'
-      - name: Upload site over FTPS
-        if: env.HAS_FTP == 'true'
+
+      # Option A — SSH (secrets: SSH_HOST, SSH_USER, SSH_PRIVATE_KEY; optional var SSH_PORT, DEPLOY_PATH)
+      - name: Deploy over SSH (rsync)
+        if: env.HAS_SSH == 'true'
+        env:
+          KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ vars.SSH_PORT || '22' }}
+          DEST: ${{ vars.DEPLOY_PATH || 'domains/timoanwedssandipa.co.za/public_html/' }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "$PORT" "$HOST" >> ~/.ssh/known_hosts
+          rsync -az --delete-after -e "ssh -i ~/.ssh/id_deploy -p $PORT" \
+            --exclude '.git*' --exclude '.github' --exclude 'docs' --exclude 'README.md' --exclude '.cpanel.yml' \
+            ./ "$USER@$HOST:$DEST"
+
+      # Option B — FTP (secrets: FTP_SERVER, FTP_USERNAME, FTP_PASSWORD; optional var FTP_DIR)
+      - name: Deploy over FTPS
+        if: env.HAS_SSH != 'true' && env.HAS_FTP == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -26,3 +45,8 @@ jobs:
             .github/**
             docs/**
             README.md
+            .cpanel.yml
+
+      - name: Nothing to deploy with
+        if: env.HAS_SSH != 'true' && env.HAS_FTP != 'true'
+        run: echo "::warning::No SSH or FTP secrets set - site was NOT uploaded."
