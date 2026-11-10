@@ -7,6 +7,9 @@ window.WEDDING = {
   monogram: "T&S",
   hashtag: "#TimWedsSands",
 
+  // Shown on the envelope under the seal, followed by "welcome you"
+  hosts: "The Viriah and Sukhnundan families",
+
   // Main ceremony date/time (local SAST, +02:00) — PLACEHOLDER
   date: "2027-06-12T15:00:00+02:00",
   city: "Durban",
@@ -28,9 +31,10 @@ window.WEDDING = {
   feast: ["Canapés & chaat on arrival", "A grand Indian wedding banquet", "Traditional sweets & dessert table", "Signature cocktails & mocktails"],
 
   // Music: tries to start on page load, otherwise on the first scroll / swipe / tap.
+  // The file is already trimmed to begin at 0:20 of the original track (AAC 160 kbps, ~5.6 MB).
   // musicStart = seconds to skip into the track.
-  music: "assets/audio/a-thousand-years.mp3",
-  musicStart: 20,
+  music: "assets/audio/a-thousand-years.m4a",
+  musicStart: 0,
   musicVolume: 0.6,
 
   events: [

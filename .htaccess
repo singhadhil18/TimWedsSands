@@ -1,4 +1,6 @@
 # Compression + long-lived caching for static assets (Apache / cPanel)
+AddType audio/mp4 .m4a
+AddType image/x-icon .ico
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
 </IfModule>
@@ -8,6 +10,10 @@
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/webp "access plus 1 month"
   ExpiresByType audio/mpeg "access plus 1 month"
+  ExpiresByType audio/mp4 "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/avif "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
   ExpiresByType text/css "access plus 1 week"
   ExpiresByType application/javascript "access plus 1 week"
 </IfModule>

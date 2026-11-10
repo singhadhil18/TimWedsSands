@@ -48,3 +48,22 @@ _Last updated: 2026-11-09. Keep this file current each session._
 9. Confirm domain spelling; create subdomain, upload, enable SSL.
 10. Screenshots of the inspiration site or allow myevite.co.za in network settings.
 11. RSVP deadline, max guests per invite, kids / plus-one policy, gift wording.
+
+## Update 2026-11-10 — mobile optimisation (Lighthouse mobile 100/100/100/100, desktop 100s)
+- Guests open the invite from WhatsApp on phones, so mobile is the priority.
+- **CSS now lives inline in `index.html`** (`<style>` in the head); `assets/css/style.css` was removed. Edit styles there.
+- Page behind the envelope is `display:none` until the seal is tapped (big first-paint win on phones).
+- Photos are fetched ~0.6s after page load (or on first tap/scroll) via `data-src`/`data-srcset`, so the envelope paints first.
+- Unsplash placeholders: cropped per slot, AVIF/WebP, q=80, `srcset` sized for 3x retina phones (hero/quote band use tall 1:2 crops on portrait screens). When the couple's photos arrive, export hero/quote band ≥2400px and others ≥1600px; consider generating resized versions for srcset.
+- Song: `assets/audio/a-thousand-years.m4a` — trimmed to start at 0:20 of the original, AAC 160 kbps, −1.5 dB headroom (peak −1.1 dBFS, no clipping), 2.5s fade-in baked in (iOS ignores JS volume). Original 320 kbps MP3 is in git history (commit b65a84e) if a different start is wanted.
+- WhatsApp preview: `assets/img/og-cover.jpg` (1200×630 branded card, no date — WhatsApp caches previews; regenerate once the real date is set). Absolute og: URLs use https://timoanwedssandipa.co.za/.
+- Icons: `favicon.ico`, `assets/img/apple-touch-icon.png`. `.cpanel.yml` copies `favicon.ico` too; `.htaccess` serves `.m4a` as audio/mp4.
+
+## Update 2026-11-10 — phone review fixes
+- Envelope: bold "Tap the seal to open" on the flap; below it "The Viriah and Sukhnundan families / welcome you" (config `hosts`). `?to=` guest name still shows under it when present.
+- Header shows "Timoan & Sandipa" on phones (T&S on desktop); header is fully opaque once scrolled.
+- Story timeline on phones: short connectors between milestones (line no longer crosses text).
+- In-page links (header RSVP etc.) scroll via JS with re-aim — iOS Safari stopped short on plain #anchor jumps.
+- Save-the-date: iPhone → native calendar sheet (data: .ics), Android → Google Calendar, desktop → .ics download. ICS text now escaped.
+- RSVP: after sending, shows "Open WhatsApp" link (in-app browsers may block the pop-up) and "Edit my reply".
+- Keep the inlined HTML under ~14 KB gzipped (one TCP round trip) and avoid new fonts/styles on the envelope — e.g. italic Cormorant there cost a Lighthouse point.

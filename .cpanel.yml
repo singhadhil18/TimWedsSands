@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=$HOME/public_html/
-    - /bin/cp -R index.html .htaccess assets $DEPLOYPATH
+    - /bin/cp -R index.html favicon.ico .htaccess assets $DEPLOYPATH
