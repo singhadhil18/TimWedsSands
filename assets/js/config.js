@@ -20,7 +20,7 @@ window.WEDDING = {
   // RSVP: opens WhatsApp with the reply pre-filled AND logs a row to a Google Sheet.
   //  whatsapp: number in international format, no + (e.g. 27821234567)  — TBD
   //  sheetUrl: the Google Apps Script web-app URL (see docs/google-sheet-setup.md) — blank = WhatsApp only
-  rsvp: { whatsapp: "27000000000", sheetUrl: "", maxGuests: 6 },
+  rsvp: { whatsapp: "27603837968", sheetUrl: "", maxGuests: 6 },
 
   // The feast
   chefName: "To be announced",
@@ -41,7 +41,7 @@ window.WEDDING = {
       img: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80" }
   ],
 
-  palette: ["#1f2a24", "#b8975a", "#e9dfcc", "#8a9a86", "#f7f2e9"],
+  palette: ["#f7e4df", "#e4ecdf", "#ebe6f1", "#fbecd9", "#b98a5e"],
 
   gallery: [
     "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=900&q=80",

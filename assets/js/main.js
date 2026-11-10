@@ -96,10 +96,13 @@
 
   // ---- nav + parallax ----
   const nav = $("#nav"), par = $(".parallax"), band = $(".quote-band");
-  const onScroll = () => {
+  let ticking = false;
+  const paint = () => {
+    ticking = false;
     nav.classList.toggle("solid", scrollY > innerHeight * .6);
-    if (par) { const r = band.getBoundingClientRect(); par.style.transform = `translate3d(0,${(r.top - innerHeight / 2) * -0.12}px,0) scale(1.2)`; }
+    if (par) { const r = band.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) par.style.transform = `translate3d(0,${(r.top - innerHeight / 2) * -0.12}px,0) scale(1.2)`; }
   };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(paint); } };
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
   // ---- RSVP: attendee count + names -> Google Sheet + WhatsApp ----

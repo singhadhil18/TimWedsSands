@@ -18,6 +18,12 @@ _Last updated: 2026-11-09. Keep this file current each session._
 - Wants pragmatic, honest feedback: flag oversights, shortcomings, improvements; ask when unclear.
 - Photos of the couple coming later; Unsplash placeholders until then.
 
+## Update 2026-11-10
+- Theme changed to soft pastels (blush, sage, lilac, peach, rose accent) with light Eastern accents (mandala line art, Mughal-arch photo frames); clean, modern.
+- RSVP WhatsApp number set: +27 60 383 7968.
+- Deployment: GitHub Actions FTP workflow added (`.github/workflows/deploy.yml`); needs repo secrets FTP_SERVER, FTP_USERNAME, FTP_PASSWORD (+ optional variable FTP_DIR). Not yet live.
+- Preview copies uploaded to Google Drive: AceSite / Tim & Sandeepa Wedding Invite.
+
 ## Decisions so far
 - Design: envelope + wax seal intro, forest green / ivory / champagne gold, Italiana + Cormorant Garamond + Pinyon Script + Jost (self-hosted).
 - Music starts on seal tap (browsers block autoplay before a tap), fades in; `musicStart` offsets into the track.
@@ -27,7 +33,7 @@ _Last updated: 2026-11-09. Keep this file current each session._
 ## Action items for next session
 1. Real wedding date + time(s) — currently placeholder 12 June 2027.
 2. Real venue name + address — placeholder.
-3. RSVP WhatsApp number — placeholder 27000000000 (RSVP will not reach anyone until set).
+3. ~~RSVP WhatsApp number~~ done.
 4. Confirm events list (Mehndi / Sangeet / Ceremony / Reception?) and dress codes.
 5. Chef name, credentials, menu and bar details.
 6. Add the song file to `assets/audio/a-thousand-years.mp3`; then set `musicStart`.
