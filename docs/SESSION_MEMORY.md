@@ -1,4 +1,4 @@
-# Session memory — Tim & Sandeepa wedding e-invite
+# Session memory — Tim & Sandipa wedding e-invite
 
 _Last updated: 2026-11-09. Keep this file current each session._
 
@@ -22,11 +22,12 @@ _Last updated: 2026-11-09. Keep this file current each session._
 - Theme changed to soft pastels (blush, sage, lilac, peach, rose accent) with light Eastern accents (mandala line art, Mughal-arch photo frames); clean, modern.
 - RSVP WhatsApp number set: +27 60 383 7968.
 - Deployment: GitHub Actions FTP workflow added (`.github/workflows/deploy.yml`); needs repo secrets FTP_SERVER, FTP_USERNAME, FTP_PASSWORD (+ optional variable FTP_DIR). Not yet live.
-- Preview copies uploaded to Google Drive: AceSite / Tim & Sandeepa Wedding Invite.
+- Preview copies uploaded to Google Drive: AceSite / Tim & Sandipa Wedding Invite.
 
 ## Update 2026-11-10 (later)
 - Host: WebHostMost. Owner wants deploys pulled from GitHub; `main` branch created as the deploy branch.
-- Domain found via registry email: **timoanwedssandipa.co.za** (registered 2026-11-09) — a full domain, not a subdomain. Suggests the couple may be "Timoan & Sandipa"; names on site still "Tim & Sandeepa" pending confirmation.
+- Domain found via registry email: **timoanwedssandipa.co.za** (registered 2026-11-09) — a full domain, not a subdomain. Suggests the couple may be "Timoan & Sandipa"; names on site still "Tim & Sandipa" pending confirmation.
+- Bride’s name confirmed: **Sandipa** (2026-11-10). Groom: "Tim" vs "Timoan" still to confirm.
 - Design brief: pastel, romantic and warm. Added warm rose/peach palette, falling petals, warmer wording.
 
 ## Decisions so far

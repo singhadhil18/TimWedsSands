@@ -3,7 +3,7 @@
    ========================================================= */
 window.WEDDING = {
   partner1: "Tim",
-  partner2: "Sandeepa",
+  partner2: "Sandipa",
   monogram: "T&S",
   hashtag: "#TimWedsSands",
 

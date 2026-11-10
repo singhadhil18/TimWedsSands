@@ -1,4 +1,4 @@
-# Tim & Sandeepa — Wedding e-invite
+# Tim & Sandipa — Wedding e-invite
 
 Static site (no build step). Edit `assets/js/config.js` for names, dates, events, venue, RSVP and photos.
 

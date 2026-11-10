@@ -1,6 +1,6 @@
 # Google Sheet RSVP log — 5-minute setup
 
-1. Create a new Google Sheet (e.g. "Tim & Sandeepa RSVPs").
+1. Create a new Google Sheet (e.g. "Tim & Sandipa RSVPs").
 2. In the sheet: **Extensions → Apps Script**. Delete the sample code and paste in `docs/google-sheet-rsvp.gs`.
 3. **Deploy → New deployment → Web app**. Execute as: **Me**. Who has access: **Anyone**. Approve the permission prompt.
 4. Copy the web-app URL (ends in `/exec`) into `assets/js/config.js` → `rsvp.sheetUrl`.
